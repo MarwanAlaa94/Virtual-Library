@@ -10,7 +10,6 @@
              </br>
             <td>author: ${book.author}</td>
              </br>
-            
             <td><img src= ${book.imageLink}</alt="Flowers in Chania">
             </td>
         </tr>

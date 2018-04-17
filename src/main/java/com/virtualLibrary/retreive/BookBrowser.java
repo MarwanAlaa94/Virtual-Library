@@ -76,8 +76,6 @@ public class BookBrowser {
 			System.out.println("No matches found.");
 			return "home";
 		}
-
-		// Output results.
 		for (Volume volume : volumes.getItems()) {
 			Book book = new Book();
 			Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();

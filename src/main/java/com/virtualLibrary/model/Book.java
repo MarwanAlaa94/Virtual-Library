@@ -37,8 +37,8 @@ public class Book {
 	public List<String> getReviews() {
 		return reviews;
 	}
-	public void setReviews(List<String> reviews) {
-		this.reviews = reviews;
+	public void setReviews(ArrayList<String> result) {
+		this.reviews = result;
 	}
 	public double getRating() {
 		return rating;
