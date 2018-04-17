@@ -15,10 +15,10 @@ public class BrowsingModel {
 	
 	public String search(Books books, ModelMap model) {
 		ArrayList<Book> result = new ArrayList<Book>();
-		String query = model.getOrDefault("searchType", "title") + ":" + model.getOrDefault("query", "");
+		String query = model.getOrDefault("searchType", "title") + ": " + model.getOrDefault("query", "a");
 		List volumesList = null;
 		try {
-			volumesList = books.volumes().list(query);
+			volumesList = books.volumes().list(query).setOrderBy("relevance");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

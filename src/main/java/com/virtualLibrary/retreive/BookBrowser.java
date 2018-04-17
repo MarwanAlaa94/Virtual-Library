@@ -28,7 +28,6 @@ public class BookBrowser {
 	private ClientCredentials clientCredentials;
 	private  JsonFactory jsonFactory;
 	private  Books books;
-
 	
 	public BookBrowser() {
 		ClientCredentials clientCredentials = new ClientCredentials();
@@ -36,21 +35,17 @@ public class BookBrowser {
 		clientCredentials.errorIfNotSpecified();
 		try {
 			books = new Books.Builder(
-					GoogleNetHttpTransport.newTrustedTransport(), jsonFactory,
-					null)
+					GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
 					.setApplicationName(com.virtualLibrary.retreive.BookBrowser.APPLICATION_NAME)
 					.setGoogleClientRequestInitializer(
-							new BooksRequestInitializer(
-									ClientCredentials.API_KEY)).build();
-		} catch (GeneralSecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+						new BooksRequestInitializer(
+							ClientCredentials.API_KEY
+						)
+					).build();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String browseBooks(ModelMap model) {
@@ -62,5 +57,4 @@ public class BookBrowser {
 		return browsingModel.search(books, model);
 		
 	}
-
 }

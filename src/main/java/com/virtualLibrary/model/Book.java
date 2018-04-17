@@ -18,8 +18,12 @@ public class Book {
 		List<String> authors = volumeInfo.getAuthors();
 		if (authors != null && !authors.isEmpty())
 			this.author = authors.get(0);
-        String imageLink = volumeInfo.getImageLinks().get("thumbnail").toString();
-        this.imageLink = imageLink;   
+        try {
+        	String imageLink = volumeInfo.getImageLinks().get("thumbnail").toString();
+        	this.imageLink = imageLink;
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
 	}
 	
 	public String getTitle() {
