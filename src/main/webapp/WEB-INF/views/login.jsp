@@ -7,7 +7,7 @@
 	</head>
 	<body>
 	  <form action="/login" method="post">
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">s</div>
+        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">connecting....</div>
       </form>
 	  
 	  <script src="https://apis.google.com/js/platform.js" async defer></script>
