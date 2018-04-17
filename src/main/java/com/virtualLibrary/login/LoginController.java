@@ -1,4 +1,4 @@
-package com.in28minutes.login;
+package com.virtualLibrary.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +15,5 @@ public class LoginController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String showGoogleLoginPage() {
 		return "login";
-	}
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String handleGoogleUserLogin(ModelMap model, @RequestParam String name) {
-		model.put("name", name);
-		return "welcome";
 	}
 }
