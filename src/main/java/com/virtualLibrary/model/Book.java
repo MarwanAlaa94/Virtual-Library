@@ -3,12 +3,24 @@ package com.virtualLibrary.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.api.services.books.model.Volume;
+
 public class Book {
 	private String title;
 	private String author;
 	private String description;
 	private String imageLink;
 	private List<String> reviews = new ArrayList<String>();
+	
+	public Book(Volume volume) {
+		Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
+		this.title = volumeInfo.getTitle();
+		List<String> authors = volumeInfo.getAuthors();
+		if (authors != null && !authors.isEmpty())
+			this.author = authors.get(0);
+        String imageLink = volumeInfo.getImageLinks().get("thumbnail").toString();
+        this.imageLink = imageLink;   
+	}
 	
 	public String getTitle() {
 		return title;
