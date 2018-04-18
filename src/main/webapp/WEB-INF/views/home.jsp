@@ -2,78 +2,46 @@
 <%@ include file="common/navigation.jspf"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<div class="search-block">
+<form action="/search" method="POST">
+    <p style="color:#f3efdb">Search by:</hp><br>
+     <div>
+     <select style"margin-bottom:14px; " name="key">
+        <option value="Title">Title</option>
+        <option value="Category">Category</option>
+        <option value="Author">Author</option>
+        <option value="isbn">ISBN</option>
+     </select>
+     </div>
+    <br>
+    <input type="text" name="value" value="">
+    <br><br>
+    <input type="submit" value="Search">
+</form>
+</div>
 
-<div class="container">
-<h2>Sciencefiction</h2>
-<c:forEach items="${Sciencefiction}" var="book">
-   <tr>   
-       </br>  
-       <td>title: ${book.title}</td>
-        </br>
-       <td>author: ${book.author}</td>
-        </br>
-       <td><img src= ${book.imageLink}</alt="Flowers in Chania">
-       </td>
-   </tr>
+<div>
+<c:forEach var="category" items="${categoryList}">
+    <form id=${category.key} action="/bookGrid" method="post">
+        <input type="hidden" name="category" value="${category.key}">
+        <a href="#" onclick="document.getElementById('${category.key}').submit();">
+         <h2>${category.key}</h2></a>
+    </form>
+        <div class="outer">
+        <c:forEach items="${category.value}" var="book">
+        <div class="inner">
+           <div>
+              <img src= ${book.imageLink}> 
+           </div>
+           <div>
+               Title: ${book.title}</td>
+           </div>
+           <div>
+               Author: ${book.author}</td>
+           </div>
+        </div>
+       </c:forEach>
+       </div>
 </c:forEach>
-<h2>Mystery</h2>
-<c:forEach items="${Mystery}" var="book">
-   <tr>   
-       </br>  
-       <td>title: ${book.title}</td>
-        </br>
-       <td>author: ${book.author}</td>
-        </br>
-       <td><img src= ${book.imageLink}</alt="Flowers in Chania">
-       </td>
-   </tr>
-</c:forEach>
-</br>
-</br>
-</br>
-</br>
-</br>
-<h2>Romance</h2>
-<c:forEach items="${Romance}" var="book">
-   <tr>   
-       </br>  
-       <td>title: ${book.title}</td>
-        </br>
-       <td>author: ${book.author}</td>
-        </br>
-       <td><img src= ${book.imageLink}</alt="Flowers in Chania">
-       </td>
-   </tr>
-</c:forEach>
-</br>
-</br>
-</br>
-</br>
-</br>
-<h2>Horror</h2>
-<c:forEach items="${Horror}" var="book">
-   <tr>   
-       </br>  
-       <td>title: ${book.title}</td>
-        </br>
-       <td>author: ${book.author}</td>
-        </br>
-       <td><img src= ${book.imageLink}</alt="Flowers in Chania">
-       </td>
-   </tr>
-</c:forEach>
-</br>
-<h2>Drama</h2>
-<c:forEach items="${Drama}" var="book">
-   <tr>   
-       </br>  
-       <td>title: ${book.title}</td>
-        </br>
-       <td>author: ${book.author}</td>
-        </br>
-       <td><img src= ${book.imageLink}</alt="Flowers in Chania">
-       </td>
-   </tr>
-</c:forEach>
-
+</div>	
 <%@ include file="common/footer.jspf"%>

@@ -2,18 +2,22 @@ package com.virtualLibrary.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.ui.ModelMap;
+
 import com.google.api.services.books.Books;
 import com.google.api.services.books.Books.Volumes.List;
 import com.google.api.services.books.model.Volumes;
 
 public class BrowsingModel {
 
-	public void browseBooks(Books books, ModelMap model, String category) {
-		search(books, model,"category", category, 5);
+	public void browseBooks(Books books, Map<String,ArrayList<Book>> map, String category) {
+		search(books, map, "category", category, 10);
 	}
 	
-	public void search(Books books, ModelMap model,
+	public void search(Books books, Map<String, ArrayList<Book>> map,
 			String searchKey, String searchVal, long limit) {
 		
 		ArrayList<Book> result = new ArrayList<Book>();
@@ -21,7 +25,8 @@ public class BrowsingModel {
 		System.out.println(query);
 		List volumesList = null;
 		try {
-			volumesList = books.volumes().list(query).setOrderBy("relevance").setMaxResults(limit);
+			volumesList = books.volumes().list(query).setPrintType("books").
+					setOrderBy("relevance").setMaxResults(limit);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -37,7 +42,7 @@ public class BrowsingModel {
 		}
 		volumes.getItems().forEach(item -> result.add(new Book(item)));
 		System.out.println(searchVal);
-		model.addAttribute(searchVal, result);
+		map.put(searchVal, result);
 		return;
 	}	
 }

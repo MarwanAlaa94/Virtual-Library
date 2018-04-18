@@ -3,7 +3,7 @@ package com.virtualLibrary.Authentication;
 
 public class ClientCredentials {
   public static final String API_KEY =
-		"AIzaSyDVkqfCQohc1Ts9oe0hrRMTtH5ljsrIsX0";
+		"AIzaSyDhuxOYrtwpNw-63es6mHdAAdRh-HrDLKQ";
 
   public void errorIfNotSpecified() {
 	System.out.println("Key is: " + API_KEY);

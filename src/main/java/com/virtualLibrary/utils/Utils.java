@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class Utils {
 	
-	public static String standardImageLink = "https://drive.google.com/file/d/1hJla18tGjJszPU_Dx55y2HlKMqRABc2O/view";
+	public static String standardImageLink = "/resources/img/book1.png";
     public static List getSupportedCategories() {
     	Properties prop = new Properties();
     	InputStream input = null;
