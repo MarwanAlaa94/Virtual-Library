@@ -1,7 +1,7 @@
 <%@ include file="common/header.jspf"%>
 <%@ include file="common/navigation.jspf"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
-	Welcome You are now authenticated.
      </br>
      <c:forEach items="${result}" var="book">
         <tr>   
@@ -14,6 +14,7 @@
             </td>
         </tr>
 </c:forEach>
+
 </div>
 
 <%@ include file="common/footer.jspf"%>
