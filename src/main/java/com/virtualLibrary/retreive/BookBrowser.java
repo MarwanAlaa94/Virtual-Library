@@ -3,6 +3,8 @@ package com.virtualLibrary.retreive;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +18,7 @@ import com.google.api.services.books.Books;
 import com.google.api.services.books.BooksRequestInitializer;
 import com.virtualLibrary.Authentication.ClientCredentials;
 import com.virtualLibrary.model.BrowsingModel;
+import com.virtualLibrary.utils.Utils;
 
 @Controller
 public class BookBrowser {
@@ -49,12 +52,17 @@ public class BookBrowser {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String browseBooks(ModelMap model) {
-		return browsingModel.browseBooks(books, model);
+		List<String> categories = Utils.getSupportedCategories();
+		for(String category : categories){
+		    System.out.println("hamada" + category);
+			browsingModel.browseBooks(books, model,category.replaceAll("\"", ""));
+		}
+		return "home";
 	}
 	
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public String search(ModelMap model){
-		return browsingModel.search(books, model);
+	//@RequestMapping(value = "/search", method = RequestMethod.POST)
+	//public String search(ModelMap model){
+	//	return browsingModel.search(books, model);
 		
-	}
+	//}
 }

@@ -9,16 +9,19 @@ import com.google.api.services.books.model.Volumes;
 
 public class BrowsingModel {
 
-	public String browseBooks(Books books, ModelMap model) {
-		return search(books, model);
+	public void browseBooks(Books books, ModelMap model, String category) {
+		search(books, model,"category", category, 5);
 	}
 	
-	public String search(Books books, ModelMap model) {
+	public void search(Books books, ModelMap model,
+			String searchKey, String searchVal, long limit) {
+		
 		ArrayList<Book> result = new ArrayList<Book>();
-		String query = model.getOrDefault("searchType", "title") + ": " + model.getOrDefault("query", "a");
+		String query = searchKey + ":" + searchVal;
+		System.out.println(query);
 		List volumesList = null;
 		try {
-			volumesList = books.volumes().list(query).setOrderBy("relevance");
+			volumesList = books.volumes().list(query).setOrderBy("relevance").setMaxResults(limit);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -30,10 +33,11 @@ public class BrowsingModel {
 		}
 		if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
 			System.out.println("No matches found.");
-			return "home";
+			return;
 		}
 		volumes.getItems().forEach(item -> result.add(new Book(item)));
-		model.addAttribute("result", result);
-		return "home";
+		System.out.println(searchVal);
+		model.addAttribute(searchVal, result);
+		return;
 	}	
 }

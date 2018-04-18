@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.services.books.model.Volume;
+import com.virtualLibrary.utils.Utils;
 
 public class Book {
 	private String title;
@@ -18,11 +19,15 @@ public class Book {
 		List<String> authors = volumeInfo.getAuthors();
 		if (authors != null && !authors.isEmpty())
 			this.author = authors.get(0);
+		String imageLink = null;
         try {
-        	String imageLink = volumeInfo.getImageLinks().get("thumbnail").toString();
+        	imageLink = volumeInfo.getImageLinks().get("thumbnail").toString();
         	this.imageLink = imageLink;
         } catch (Exception e) {
-        	e.printStackTrace();
+        }finally {
+        	if(imageLink == null){
+        		this.imageLink = Utils.standardImageLink;
+        	}
         }
 	}
 	
@@ -70,8 +75,4 @@ public class Book {
 	}
 	private double rating;
 	private String googleMoreInfo;
-	
-	
-	
-
 }

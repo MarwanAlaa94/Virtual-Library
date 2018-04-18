@@ -91,5 +91,13 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>homeCategories.properties</include>
+                </includes>
+            </resource>
+       </resources>
 	</build>
 </project>
