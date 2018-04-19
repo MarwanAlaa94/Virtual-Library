@@ -71,15 +71,16 @@ public class BrowsingModelTest {
 	@Test
 	public void testCountValue() {
 		int count = random.nextInt(10);
-		ArgumentCaptor<Integer> intCaptor = ArgumentCaptor.forClass(Integer.class);
+		Long testingCount = 0L + count;
+		ArgumentCaptor<Long> intCaptor = ArgumentCaptor.forClass(Long.class);
 		
 		when(model.search(Mockito.any(Books.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt()))
 		.thenReturn(createList(count));
 		ArrayList<Book> ret = model.search(books, "key", "value", count);
 		verify(model, times(1)).search(Mockito.any(Books.class), Mockito.anyString(), Mockito.anyString(), intCaptor.capture());
 		
-		java.util.List<Integer> capturedInt = intCaptor.getAllValues();
-		//assertEquals(count + 0L, capturedInt.get(0) + 0L);
+		java.util.List<Long> capturedInt = intCaptor.getAllValues();
+		assertEquals(testingCount, capturedInt.get(0));
 	}
 	
 	private ArrayList<Book> createList(int booksCount) {

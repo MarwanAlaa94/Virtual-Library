@@ -1,6 +1,5 @@
 package com.virtualLibrary.utils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class Utils {
     	List<String> categories = new ArrayList<String>();
     	try {
 
-    		input = Utils.class.getResourceAsStream("homeCategories.properties");
+    		input = Utils.class.getClassLoader().getResourceAsStream("homeCategories.properties");
     		prop.load(input);
     		
     		int probNo = Integer.parseInt(prop.getProperty("categoriesNo"));
