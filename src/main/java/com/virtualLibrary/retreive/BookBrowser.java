@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,10 @@ public class BookBrowser {
 			.getCurrencyInstance();
 	private static final NumberFormat PERCENT_FORMATTER = NumberFormat
 			.getPercentInstance();
-	private BrowsingModel browsingModel = new BrowsingModel();
+	
+	@Autowired
+	private BrowsingModel browsingModel;
+	
 	private ClientCredentials clientCredentials;
 	private  JsonFactory jsonFactory;
 	private  Books books;
@@ -41,6 +45,7 @@ public class BookBrowser {
 		ClientCredentials clientCredentials = new ClientCredentials();
 		JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 		clientCredentials.errorIfNotSpecified();
+		
 		try {
 			books = new Books.Builder(
 					GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
@@ -60,7 +65,7 @@ public class BookBrowser {
 		List<String> categories = Utils.getSupportedCategories();
 		HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();
 		for(String category : categories){
-			browsingModel.browseBooks(books, map, category.replaceAll("\"", ""));
+			map.put(category.replaceAll("\"", ""), browsingModel.browseBooks(books, category.replaceAll("\"", "")));
 		}
 		model.addAttribute("categoryList", map);
 		return "home";
@@ -69,7 +74,7 @@ public class BookBrowser {
 	@RequestMapping(value = "/bookGrid", method = RequestMethod.POST)
 	public String  getBookGrid(ModelMap model,  @RequestParam String category) {
 		HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();	
-		browsingModel.search(books, map, "category", category, 40);
+		map.put(category, browsingModel.search(books, "category", category, 40));
 		model.addAttribute("categoryList", map);
 		return "bookGrid";
 	}
@@ -78,7 +83,7 @@ public class BookBrowser {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
 	public String search(ModelMap model, @RequestParam String key, @RequestParam String value){
     	HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();
-    	browsingModel.search(books, map, key, value, 40);
+    	map.put(value, browsingModel.search(books, key, value, 40));
     	model.addAttribute("categoryList", map);
 		model.keySet().forEach(temp->System.out.println("model =      " + temp));
 		return "bookGrid";
