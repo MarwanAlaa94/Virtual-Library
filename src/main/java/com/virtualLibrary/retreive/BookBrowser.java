@@ -1,14 +1,9 @@
 package com.virtualLibrary.retreive;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
