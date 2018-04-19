@@ -29,6 +29,7 @@
     </form>
         <div class="outer">
         <c:forEach items="${category.value}" var="book">
+        <a style= "color: #f3efdb; "href="${book.googleMoreInfo}">
         <div class="inner">
            <div>
               <img src= ${book.imageLink}> 
@@ -40,6 +41,7 @@
                Author: ${book.author}</td>
            </div>
         </div>
+        </a>
        </c:forEach>
        </div>
 </c:forEach>

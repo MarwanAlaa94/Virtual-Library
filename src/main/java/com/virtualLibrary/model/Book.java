@@ -17,6 +17,8 @@ public class Book {
 		Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
 		this.title = volumeInfo.getTitle();
 		List<String> authors = volumeInfo.getAuthors();
+		this.googleMoreInfo = volumeInfo.getInfoLink();
+		System.out.println(this.googleMoreInfo);
 		if (authors != null && !authors.isEmpty())
 			this.author = authors.get(0);
 		String imageLink = null;
