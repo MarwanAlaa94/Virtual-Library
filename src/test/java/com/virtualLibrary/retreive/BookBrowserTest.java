@@ -21,7 +21,7 @@ public class BookBrowserTest {
 	@Mock
 	BrowsingModel model;
 	@InjectMocks
-    BookBrowser browser;
+	BookBrowser browser;
 	@Before
 	public void initializeMockito() {
 		MockitoAnnotations.initMocks(this);

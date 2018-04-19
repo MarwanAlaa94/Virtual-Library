@@ -13,6 +13,10 @@ public class Book {
 	private String imageLink;
 	private List<String> reviews = new ArrayList<String>();
 	
+	public Book(String title) {
+		this.title = title;
+	}
+	
 	public Book(Volume volume) {
 		Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
 		this.title = volumeInfo.getTitle();

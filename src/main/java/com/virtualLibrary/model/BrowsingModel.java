@@ -2,11 +2,8 @@ package com.virtualLibrary.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import com.google.api.services.books.Books;
 import com.google.api.services.books.Books.Volumes.List;
