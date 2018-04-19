@@ -1,7 +1,7 @@
 <nav role="navigation" class="navbar navbar-default">
 
 	<div class="">
-		<a href="/" class="navbar-brand">Virtual library</a>
+		<a href="/login" class="navbar-brand">Virtual library</a>
 	</div>
 
 	<div class="navbar-collapse">

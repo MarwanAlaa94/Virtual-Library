@@ -18,7 +18,7 @@ public class Utils {
     	List<String> categories = new ArrayList<String>();
     	try {
 
-    		input = Utils.class.getClassLoader().getResourceAsStream("homeCategories.properties");
+    		input = Utils.class.getResourceAsStream("homeCategories.properties");
     		prop.load(input);
     		
     		int probNo = Integer.parseInt(prop.getProperty("categoriesNo"));

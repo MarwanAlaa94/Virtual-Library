@@ -13,7 +13,7 @@ import com.google.api.services.books.model.Volumes;
 public class BrowsingModel {
 
 	public ArrayList<Book> browseBooks(Books books, String category) {
-		return search(books, "category", category, 10);
+		return search(books, "category", category, 7);
 	}
 	
 	public ArrayList<Book> search(Books books,
