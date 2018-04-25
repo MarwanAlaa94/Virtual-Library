@@ -3,9 +3,6 @@ package com.virtualLibrary.model;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
-
-import org.springframework.ui.ModelMap;
 
 import com.google.api.services.books.Books;
 import com.google.api.services.books.Books.Volumes.List;
@@ -41,7 +38,6 @@ public class BrowsingModel {
 			return;
 		}
 		volumes.getItems().forEach(item -> result.add(new Book(item)));
-		System.out.println(searchVal);
 		map.put(searchVal, result);
 		return;
 	}	

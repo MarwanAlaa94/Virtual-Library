@@ -1,6 +1,5 @@
 package com.virtualLibrary.utils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.Properties;
 public class Utils {
 	
 	public static String standardImageLink = "/resources/img/book1.png";
-    public static List getSupportedCategories() {
+    public static List<String> getSupportedCategories() {
     	Properties prop = new Properties();
     	InputStream input = null;
     	

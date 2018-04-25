@@ -1,13 +1,8 @@
 package com.virtualLibrary.retreive;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,13 +23,7 @@ import com.virtualLibrary.utils.Utils;
 @Controller
 public class BookBrowser {
 	private static final String APPLICATION_NAME = "VirtualLibrary";
-	private static final NumberFormat CURRENCY_FORMATTER = NumberFormat
-			.getCurrencyInstance();
-	private static final NumberFormat PERCENT_FORMATTER = NumberFormat
-			.getPercentInstance();
 	private BrowsingModel browsingModel = new BrowsingModel();
-	private ClientCredentials clientCredentials;
-	private  JsonFactory jsonFactory;
 	private  Books books;
 	
 	public BookBrowser() {
@@ -46,9 +35,7 @@ public class BookBrowser {
 					GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
 					.setApplicationName(com.virtualLibrary.retreive.BookBrowser.APPLICATION_NAME)
 					.setGoogleClientRequestInitializer(
-						new BooksRequestInitializer(
-							ClientCredentials.API_KEY
-						)
+						new BooksRequestInitializer(ClientCredentials.API_KEY)
 					).build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -57,6 +44,7 @@ public class BookBrowser {
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String browseBooks(ModelMap model) {
+		System.out.println("hamda is here");
 		List<String> categories = Utils.getSupportedCategories();
 		HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();
 		for(String category : categories){
@@ -73,7 +61,6 @@ public class BookBrowser {
 		model.addAttribute("categoryList", map);
 		return "bookGrid";
 	}
-	
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
 	public String search(ModelMap model, @RequestParam String key, @RequestParam String value){

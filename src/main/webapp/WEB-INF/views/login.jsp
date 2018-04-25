@@ -18,7 +18,17 @@
 		  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
 		  var id_token = googleUser.getAuthResponse().id_token;
 		    console.log("ID Token: " + id_token);
-		    var form = document.createElement("form");
+				var tokenForm = document.createElement("form");
+		    tokenForm.setAttribute("method", "post");
+		    tokenForm.setAttribute("action", "/home");
+		    var hiddenTokenField = document.createElement("input");
+		    		hiddenTokenField.setAttribute("type", "hidden");
+						hiddenTokenField.setAttribute("name", "token");
+						hiddenTokenField.setAttribute("value", id_token);
+				tokenForm.appendChild(hiddenTokenField);
+		    document.body.appendChild(tokenForm);
+				tokenForm.submit();
+				var form = document.createElement("form");
 		    form.setAttribute("method", "get");
 		    form.setAttribute("action", "/home");
 		    var hiddenField = document.createElement("input");
@@ -27,7 +37,7 @@
             hiddenField.setAttribute("value", profile.getName());
             form.appendChild(hiddenField);
 		    document.body.appendChild(form);
-		    form.submit();
+				form.submit();
 		};
 	  </script>
 	</body>
