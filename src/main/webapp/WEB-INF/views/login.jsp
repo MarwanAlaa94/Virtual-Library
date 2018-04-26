@@ -27,7 +27,7 @@
 						hiddenTokenField.setAttribute("value", id_token);
 				tokenForm.appendChild(hiddenTokenField);
 		    document.body.appendChild(tokenForm);
-				tokenForm.submit();
+				console.log('test test');
 				var form = document.createElement("form");
 		    form.setAttribute("method", "get");
 		    form.setAttribute("action", "/home");
@@ -37,6 +37,7 @@
             hiddenField.setAttribute("value", profile.getName());
             form.appendChild(hiddenField);
 		    document.body.appendChild(form);
+				tokenForm.submit();
 				form.submit();
 		};
 	  </script>
