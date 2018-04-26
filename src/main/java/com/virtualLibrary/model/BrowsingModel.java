@@ -9,7 +9,7 @@ import com.google.api.services.books.Books.Volumes.List;
 import com.google.api.services.books.model.Volumes;
 
 public class BrowsingModel {
-
+	
 	public void browseBooks(Books books, Map<String,ArrayList<Book>> map, String category) {
 		search(books, map, "category", category, 10);
 	}

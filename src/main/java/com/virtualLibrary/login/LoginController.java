@@ -24,31 +24,5 @@ public class LoginController {
 		return "login";
 	}
 	
-	@RequestMapping(value = "/home", method = RequestMethod.POST)
-	public String handleUserLogin(ModelMap model, @RequestParam String token){
-		System.out.println(token);
-		User user = getUserInfo(token);
-		return "home";
-	}
 	
-	
-	public User getUserInfo(String token) {
-		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier
-			  .Builder(new ApacheHttpTransport(), JacksonFactory.getDefaultInstance())
-			  .setAudience(Collections.singletonList(ClientCredentials.CLIENT_ID))
-			  .build();
-			// (Receive idTokenString by HTTPS POST)
-		GoogleIdToken idToken;
-		try {
-			idToken = verifier.verify(token);
-		  	if (idToken != null) {
-				return new User(idToken.getPayload());
-		  	} else {
-		  		System.out.println("Invalid ID token.");
-		  	}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 }

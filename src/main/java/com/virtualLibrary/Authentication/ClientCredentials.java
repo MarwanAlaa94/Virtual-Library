@@ -2,7 +2,7 @@ package com.virtualLibrary.Authentication;
 
 public class ClientCredentials {
 	public static final String API_KEY =
-		"AIzaSyDhuxOYrtwpNw-63es6mHdAAdRh-HrDLKQ";
+		"AIzaSyA3cffauuSJGvAgwDWh1SyXPKKFhnaZnMg";
 	public static final String CLIENT_ID =
 		"29518267527-r4dd50mjsjb5qoa7be1agcrie53rg13i.apps.googleusercontent.com";
 	public void errorIfNotSpecified() {

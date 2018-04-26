@@ -16,7 +16,7 @@
 		  // Useful data for your client-side scripts:
 		  var profile = googleUser.getBasicProfile();
 		  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-		  var id_token = googleUser.getAuthResponse().id_token;
+		  var id_token = googleUser.getAuthResponse().access_token;
 		    console.log("ID Token: " + id_token);
 				var tokenForm = document.createElement("form");
 		    tokenForm.setAttribute("method", "post");
@@ -38,7 +38,7 @@
             form.appendChild(hiddenField);
 		    document.body.appendChild(form);
 				tokenForm.submit();
-				form.submit();
+		//		form.submit();
 		};
 	  </script>
 	</body>
