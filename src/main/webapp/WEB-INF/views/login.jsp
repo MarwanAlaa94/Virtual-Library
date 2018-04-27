@@ -16,29 +16,21 @@
 		  // Useful data for your client-side scripts:
 		  var profile = googleUser.getBasicProfile();
 		  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-		  var id_token = googleUser.getAuthResponse().access_token;
+		  var id_token = googleUser.getAuthResponse().id_token;
 		    console.log("ID Token: " + id_token);
-				var tokenForm = document.createElement("form");
-		    tokenForm.setAttribute("method", "post");
-		    tokenForm.setAttribute("action", "/home");
-		    var hiddenTokenField = document.createElement("input");
-		    		hiddenTokenField.setAttribute("type", "hidden");
-						hiddenTokenField.setAttribute("name", "token");
-						hiddenTokenField.setAttribute("value", id_token);
-				tokenForm.appendChild(hiddenTokenField);
-		    document.body.appendChild(tokenForm);
-				console.log('test test');
 				var form = document.createElement("form");
-		    form.setAttribute("method", "get");
+		    form.setAttribute("method", "post");
 		    form.setAttribute("action", "/home");
 		    var hiddenField = document.createElement("input");
 		    hiddenField.setAttribute("type", "hidden");
             hiddenField.setAttribute("name", "name");
             hiddenField.setAttribute("value", profile.getName());
+		    hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", "token");
+            hiddenField.setAttribute("value", id_token);
             form.appendChild(hiddenField);
 		    document.body.appendChild(form);
-				tokenForm.submit();
-		//		form.submit();
+				form.submit();
 		};
 	  </script>
 	</body>

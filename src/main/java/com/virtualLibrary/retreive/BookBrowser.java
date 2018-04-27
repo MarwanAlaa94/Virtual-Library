@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -26,6 +27,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.BooksRequestInitializer;
+import com.google.api.services.books.model.Review;
 import com.virtualLibrary.Authentication.ClientCredentials;
 import com.virtualLibrary.Authentication.User;
 import com.virtualLibrary.model.Book;
@@ -56,8 +58,10 @@ public class BookBrowser {
   	  
 	}
 	
-	@RequestMapping(value = "/home", method = RequestMethod.GET)
-	public String browseBooks(ModelMap model) {
+	@RequestMapping(value = "/home", method = RequestMethod.POST)
+	public String browseBooks(ModelMap model, @RequestParam String token) {
+		System.out.println(token);
+		user = getUserInfo(token);
 		System.out.println("hamda is here");
 		List<String> categories = Utils.getSupportedCategories();
 		HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();
@@ -67,14 +71,6 @@ public class BookBrowser {
 		model.addAttribute("categoryList", map);
 		return "home";
 	}
-	
-	@RequestMapping(value = "/home", method = RequestMethod.POST)
-	public String handleUserLogin(ModelMap model, @RequestParam String token){
-		System.out.println(token);
-		user = getUserInfo(token);
-		return "home";
-	}
-	
 
 	@RequestMapping(value = "/bookGrid", method = RequestMethod.POST)
 	public String  getBookGrid(ModelMap model,  @RequestParam String category) {
@@ -114,24 +110,24 @@ public class BookBrowser {
 		  	//Credential cr = new AuthorizationCodeFlow(flow, lsr).authorize("user");
 
 		  	//return cr.getAccessToken();
-//			  GoogleTokenResponse tokenResponse =
-//			           new GoogleAuthorizationCodeTokenRequest(
-//			                new ApacheHttpTransport(),
-//			                JacksonFactory.getDefaultInstance(),
-//			                "https://www.googleapis.com/oauth2/v4/token",
-//			                "29518267527-r4dd50mjsjb5qoa7be1agcrie53rg13i.apps.googleusercontent.com",
-//			                "AdUkZwuGiYXjeqEL0ra34YB4",
-//			                token,
-//			                "")  // Specify the same redirect URI that you use with your web
-//			                               // app. If you don't have a web version of your app, you can
+			  GoogleTokenResponse tokenResponse =
+			           new GoogleAuthorizationCodeTokenRequest(
+			                new ApacheHttpTransport(),
+			                JacksonFactory.getDefaultInstance(),
+			                "https://www.googleapis.com/oauth2/v4/token",
+			                "29518267527-r4dd50mjsjb5qoa7be1agcrie53rg13i.apps.googleusercontent.com",
+			                "AdUkZwuGiYXjeqEL0ra34YB4",
+			                token,
+			                "http://localhost:8080")  // Specify the same redirect URI that you use with your web
+			                               // app. If you don't have a web version of your app, you can
 			                               // specify an empty string.
-//			                .execute();
+			                .execute();
 //			  String accessToken = tokenResponse.getAccessToken();
 //			  System.out.println(accessToken);
-			  GoogleCredential credential = new GoogleCredential().setAccessToken(token);
+			  Credential credential = flow.createAndStoreCredential(tokenResponse, "114828915672982309273");
 			  books = new Books.Builder(
 				GoogleNetHttpTransport.newTrustedTransport(),
-				JacksonFactory.getDefaultInstance(), null)
+				JacksonFactory.getDefaultInstance(), credential)
 					.setApplicationName(com.virtualLibrary.retreive.BookBrowser.APPLICATION_NAME)
 					.setGoogleClientRequestInitializer(
 						new BooksRequestInitializer(ClientCredentials.API_KEY)
