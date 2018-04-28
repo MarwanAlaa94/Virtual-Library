@@ -19,12 +19,14 @@
 		  var id_token = googleUser.getAuthResponse().id_token;
 		    console.log("ID Token: " + id_token);
 		    var form = document.createElement("form");
-		    form.setAttribute("method", "get");
+		    form.setAttribute("method", "post");
 		    form.setAttribute("action", "/home");
 		    var hiddenField = document.createElement("input");
 		    hiddenField.setAttribute("type", "hidden");
             hiddenField.setAttribute("name", "name");
             hiddenField.setAttribute("value", profile.getName());
+            hiddenField.setAttribute("name", "token");
+            hiddenField.setAttribute("value", id_token);
             form.appendChild(hiddenField);
 		    document.body.appendChild(form);
 		    form.submit();

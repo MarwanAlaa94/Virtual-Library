@@ -35,7 +35,7 @@ public class BookBrowserTest {
 	}
 	@Test
 	public void testBrowseBooksCallsInnerSearch() {
-		browser.browseBooks(modelMap);
+		browser.browseBooks(modelMap, "test");
 		verify(model, atLeast(1)).browseBooks(any(Books.class), anyString());
 	}
 	@Test
