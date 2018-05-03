@@ -1,4 +1,4 @@
-package com.virtualLibrary.retreive;
+	package com.virtualLibrary.retreive;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,10 +29,14 @@ public class BookInfo {
 			e.printStackTrace();
 		}
 		Volume vol = getBook(bookId);
-		double apiRating = vol == null ? 0 : vol.getVolumeInfo().getAverageRating();
-		int apiCount = vol == null ? 0 : vol.getVolumeInfo().getRatingsCount();
-		return (currRating * rateCount + apiRating * apiCount) /
-				(rateCount + apiCount);
+		System.out.println(vol);
+		
+		//Double apiRating = 3.5;
+		//if(apiRating == null) apiRating = (double) 0;
+	//	int apiCount = 5;
+		//return (currRating * rateCount + apiRating * apiCount) /
+			//	(rateCount + apiCount);
+		return currRating;
 	}
 	
 	public void rateBook(String bookId, int rating) {
@@ -116,14 +120,16 @@ public class BookInfo {
 				e.printStackTrace();
 			}
 		}
+		System.out.println(file.getAbsolutePath());
 		FileInputStream is = new FileInputStream(file);
 		prop.load(is);
 		is.close();
 		return prop;
 	}
-	private Volume getBook(String bookId) {
+	public Volume getBook(String bookId) {
 		try {
-			List<Volume> vols = books.volumes().list("isbn:" + bookId).execute().getItems();
+			List<Volume> vols = books.volumes().list("Title:" + bookId).execute().getItems();
+			System.out.println("hamada"+bookId);
 			if (vols != null && !vols.isEmpty()) return vols.get(0);
 		} catch (IOException e) {
 			e.printStackTrace();

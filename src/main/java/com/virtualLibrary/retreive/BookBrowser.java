@@ -21,6 +21,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.BooksRequestInitializer;
+import com.google.api.services.books.model.Volume;
 import com.virtualLibrary.Authentication.ClientCredentials;
 import com.virtualLibrary.Authentication.User;
 import com.virtualLibrary.model.Book;
@@ -42,6 +43,7 @@ public class BookBrowser {
 	private JsonFactory jsonFactory;
 	private Books books;
 	private User user;
+	private BookInfo bookInfo;
 	public BookBrowser() {
 		ClientCredentials clientCredentials = new ClientCredentials();
 		JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -59,16 +61,16 @@ public class BookBrowser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		bookInfo = new BookInfo(books); 
 	}
 	
-	@RequestMapping(value = "/home", method = RequestMethod.POST)
-	public String browseBooks(ModelMap model, @RequestParam String token) {
-		System.out.println("token: " + token);
-		user = getUserInfo(token);
+	
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public String browseHome(ModelMap model) {
 		List<String> categories = Utils.getSupportedCategories();
 		HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();
 		for(String category : categories){
-			map.put(category.replaceAll("\"", ""), browsingModel.browseBooks(books, category.replaceAll("\"", "")));
+			map.put(category.replaceAll("\"", ""), browsingModel.browseBooks(books, category.replaceAll("\"", ""), bookInfo));
 		}
 		model.addAttribute("categoryList", map);
 		return "home";
@@ -77,7 +79,7 @@ public class BookBrowser {
 	@RequestMapping(value = "/bookGrid", method = RequestMethod.POST)
 	public String  getBookGrid(ModelMap model,  @RequestParam String category) {
 		HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();	
-		map.put(category, browsingModel.search(books, "category", category, 40));
+		map.put(category, browsingModel.search(books, "category", category, 40, bookInfo));
 		model.addAttribute("categoryList", map);
 		return "bookGrid";
 	}
@@ -86,11 +88,126 @@ public class BookBrowser {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
 	public String search(ModelMap model, @RequestParam String key, @RequestParam String value){
     	HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();
-    	map.put(value, browsingModel.search(books, key, value, 40));
+    	map.put(value, browsingModel.search(books, key, value, 40, bookInfo));
     	model.addAttribute("categoryList", map);
 		model.keySet().forEach(temp->System.out.println("model =      " + temp));
 		return "bookGrid";
 	}
+    
+    @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
+   	public String dummy(ModelMap model){
+    	System.out.println(user.getName());
+		HashMap<String, List<Book>> map = new HashMap<String, List<Book>> ();
+		List<Book> favBooks = Utils.getFavouriteBooks(user.getUserId(), browsingModel, books, bookInfo);
+		List<Book> readBooks = Utils.getReadBooks(user.getUserId(), browsingModel, books, bookInfo);
+		List<Book> toBeReadBooks = Utils.getToBeReadBooks(user.getUserId(), browsingModel, books, bookInfo);		
+		
+		for(Book book : favBooks){
+			System.out.println("favourites: " + book.getTitle());	
+		}
+
+		for(Book book : readBooks){
+			System.out.println("read: " + book.getTitle());	
+		}
+
+		for(Book book : toBeReadBooks){
+			System.out.println("toBeRead: " + book.getTitle());	
+		}
+		
+		map.put("Favourites", favBooks);
+		map.put("ReadBooks", readBooks);
+		map.put("TobeReadBooks",toBeReadBooks);
+
+		model.addAttribute("UserInfo", map);
+		model.addAttribute("user", user);
+		
+		System.out.println("hamda is here");
+   		return "userInfo";
+   	}
+      
+    @RequestMapping(value = "/bookInfo", method = RequestMethod.POST)
+   	public String getBookInfo(ModelMap model,@RequestParam String ISBN){
+    	System.out.println(ISBN);
+    	Book book = browsingModel.search(books, "Title", ISBN, 1, bookInfo).get(0);
+        model.addAttribute("book", book);
+        return "bookInfo";
+   	}
+      
+    @RequestMapping(value = "/addFav", method = RequestMethod.POST)
+   	public void addFav(ModelMap model, @RequestParam String ISBN){
+    	System.out.println("I am hereeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    	Book book = browsingModel.search(books, "Title", ISBN, 1, bookInfo).get(0);
+    	Utils.addFavBook(user.getUserId(), book, ISBN);
+    	
+    	System.out.println("I am executed again :)");
+   	}
+      
+    @RequestMapping(value = "/addToRead", method = RequestMethod.POST)
+   	public void dummy4(ModelMap model, @RequestParam String ISBN){
+    	Book book = browsingModel.search(books, "Title", ISBN, 1, bookInfo).get(0);
+    	Utils.addToBeReadBook(user.getUserId(), book, ISBN);
+      	System.out.println("added to read");
+   	}
+      
+    @RequestMapping(value = "/done", method = RequestMethod.POST)
+   	public void dummy5(ModelMap model, @RequestParam String ISBN){
+    	Book book = browsingModel.search(books, "Title", ISBN, 1, bookInfo).get(0);
+    	Utils.addReadBook(user.getUserId(), book, ISBN);
+      	System.out.println("done");
+   	}
+    
+    @RequestMapping(value = "/rate", method = RequestMethod.POST)
+   	public void rateBook(ModelMap model, @RequestParam String rate, @RequestParam String ISBN){
+      	bookInfo.rateBook(ISBN, Integer.parseInt(rate));
+      	
+   	}
+    
+    @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
+	public String getUserBooks(ModelMap model, @RequestParam String token) {
+    	user = getUserInfo(token);
+    	if(!Utils.userDataFileExists(user.getUserId())) {
+			Utils.initiateUserDataFile(user.getUserId());
+		}else {
+			System.out.println("data file exists!");
+		}
+
+		System.out.println("token: " + token);
+		
+		System.out.println(user.getName());
+		HashMap<String, List<Book>> map = new HashMap<String, List<Book>> ();
+		List<Book> favBooks = Utils.getFavouriteBooks(user.getUserId(), browsingModel, books, bookInfo);
+		List<Book> readBooks = Utils.getReadBooks(user.getUserId(), browsingModel, books, bookInfo);
+		List<Book> toBeReadBooks = Utils.getToBeReadBooks(user.getUserId(), browsingModel, books, bookInfo);		
+		
+		for(Book book : favBooks){
+			System.out.println("favourites: " + book.getTitle());	
+		}
+
+		for(Book book : readBooks){
+			System.out.println("read: " + book.getTitle());	
+		}
+
+		for(Book book : toBeReadBooks){
+			System.out.println("toBeRead: " + book.getTitle());	
+		}
+		
+		map.put("Favourites", favBooks);
+		map.put("ReadBooks", readBooks);
+		map.put("TobeReadBooks",toBeReadBooks);
+
+		model.addAttribute("UserInfo", map);
+		model.addAttribute("user", user);
+		
+		System.out.println("hamda is here");
+		
+		return "userInfo";
+	}
+
+      
+    @RequestMapping(value = "/addReview", method = RequestMethod.POST)
+      public void addReview(ModelMap model,@RequestParam String review, @RequestParam String ISBN){
+          bookInfo.reviewBook(ISBN, "hamada", review);    
+      }
     public User getUserInfo(String token) {
 		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier
 			  .Builder(new ApacheHttpTransport(), JacksonFactory.getDefaultInstance())

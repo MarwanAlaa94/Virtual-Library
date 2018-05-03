@@ -29,8 +29,10 @@
     </form>
         <div class="outer">
         <c:forEach items="${category.value}" var="book">
-        <a style= "color: #f3efdb; "href="${book.googleMoreInfo}">
         <div class="inner">
+           <form id=${book.ISBN} action="/bookInfo" method="post">
+        <input type="hidden" name="ISBN" value="${book.ISBN}">
+        <a href="#" onclick="document.getElementById('${book.ISBN}').submit();">
            <div>
               <img src= ${book.imageLink}> 
            </div>
@@ -42,6 +44,7 @@
            </div>
         </div>
         </a>
+        </form>
        </c:forEach>
        </div>
 </c:forEach>

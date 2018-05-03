@@ -8,16 +8,17 @@ import org.springframework.stereotype.Service;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.Books.Volumes.List;
 import com.google.api.services.books.model.Volumes;
+import com.virtualLibrary.retreive.BookInfo;
 
 @Service
 public class BrowsingModel {
 
-	public ArrayList<Book> browseBooks(Books books, String category) {
-		return search(books, "category", category, 7);
+	public ArrayList<Book> browseBooks(Books books, String category, BookInfo bookInfo) {
+		return search(books, "category", category, 7, bookInfo);
 	}
 	
 	public ArrayList<Book> search(Books books,
-			String searchKey, String searchVal, long limit) {
+			String searchKey, String searchVal, long limit ,BookInfo bookInfo) {
 		
 		ArrayList<Book> result = new ArrayList<Book>();
 		String query = searchKey + ":" + searchVal;
@@ -39,7 +40,7 @@ public class BrowsingModel {
 			System.out.println("No matches found.");
 			return result;
 		}
-		volumes.getItems().forEach(item -> result.add(new Book(item)));
+		volumes.getItems().forEach(item -> result.add(new Book(item, bookInfo)));
 		System.out.println(searchVal);
 		return result;
 	}	

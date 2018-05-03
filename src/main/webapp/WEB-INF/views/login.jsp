@@ -20,7 +20,7 @@
 		    console.log("ID Token: " + id_token);
 		    var form = document.createElement("form");
 		    form.setAttribute("method", "post");
-		    form.setAttribute("action", "/home");
+		    form.setAttribute("action", "/userInfo");
 		    var hiddenField = document.createElement("input");
 		    hiddenField.setAttribute("type", "hidden");
             hiddenField.setAttribute("name", "name");

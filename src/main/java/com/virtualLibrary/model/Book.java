@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.services.books.model.Volume;
+import com.virtualLibrary.retreive.BookInfo;
 import com.virtualLibrary.utils.Utils;
 
 public class Book {
@@ -11,18 +12,40 @@ public class Book {
 	private String author;
 	private String description;
 	private String imageLink;
+	private String ISBN;
+	private BookInfo bookInfo;
 	private List<String> reviews = new ArrayList<String>();
+	private List<String> reviewers = new ArrayList<String>();
+	public String getISBN() {
+		return ISBN;
+	}
+
+	public Book() {
+		
+	}
+	public void setISBN(String iSBN) {
+		ISBN = iSBN;
+	}
+
+	public void setReviews(List<String> reviews) {
+		this.reviews = reviews;
+	}
+	
+    
 	
 	public Book(String title) {
 		this.title = title;
 	}
 	
-	public Book(Volume volume) {
+	public Book(Volume volume, BookInfo bookInfo) {
 		Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
 		this.title = volumeInfo.getTitle();
 		List<String> authors = volumeInfo.getAuthors();
 		this.googleMoreInfo = volumeInfo.getInfoLink();
-		System.out.println(this.googleMoreInfo);
+		this.description = volumeInfo.getDescription();
+		this.ISBN = volume.getId();
+		this.bookInfo = bookInfo;
+		//System.out.println(this.googleMoreInfo);
 		if (authors != null && !authors.isEmpty())
 			this.author = authors.get(0);
 		String imageLink = null;
@@ -35,6 +58,9 @@ public class Book {
         		this.imageLink = Utils.standardImageLink;
         	}
         }
+        List<List<String>> temp = bookInfo.getReviews(ISBN);
+        reviewers = temp.get(0);
+        reviews = temp.get(1);
 	}
 	
 	public String getTitle() {
@@ -67,18 +93,14 @@ public class Book {
 	public void setReviews(ArrayList<String> result) {
 		this.reviews = result;
 	}
-	public double getRating() {
-		return rating;
-	}
-	public void setRating(double rating) {
-		this.rating = rating;
-	}
 	public String getGoogleMoreInfo() {
 		return googleMoreInfo;
 	}
 	public void setGoogleMoreInfo(String googleMoreInfo) {
 		this.googleMoreInfo = googleMoreInfo;
 	}
-	private double rating;
+	public String getRating() {
+		return String.format("%.2f", bookInfo.getRating(ISBN));
+	}
 	private String googleMoreInfo;
 }

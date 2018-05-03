@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="<c:url value="/resources/css/styles1.css"></c:url>">
+<link rel="stylesheet" href="<c:url value="/resources/css/styles2.css"></c:url>">
 </head>
 
 <body background="<c:url value="/resources/img/library_background.jpg"></c:url>">
