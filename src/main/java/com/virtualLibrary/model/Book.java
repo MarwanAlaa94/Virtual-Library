@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.services.books.model.Volume;
-import com.virtualLibrary.retreive.BookInfo;
 import com.virtualLibrary.utils.Utils;
 
 public class Book {
@@ -37,7 +36,7 @@ public class Book {
 		this.title = title;
 	}
 	
-	public Book(Volume volume, BookInfo bookInfo) {
+	public Book(Volume volume) {
 		Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
 		this.title = volumeInfo.getTitle();
 		List<String> authors = volumeInfo.getAuthors();

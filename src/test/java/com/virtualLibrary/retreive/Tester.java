@@ -16,7 +16,7 @@ import com.google.api.services.books.Books;
 import com.google.api.services.books.BooksRequestInitializer;
 import com.virtualLibrary.Authentication.ClientCredentials;
 import com.virtualLibrary.model.Book;
-import com.virtualLibrary.model.BrowsingModel;
+import com.virtualLibrary.model.BookInfo;
 import com.virtualLibrary.utils.Utils;
 
 

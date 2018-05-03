@@ -15,6 +15,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.BooksRequestInitializer;
 import com.virtualLibrary.Authentication.ClientCredentials;
+import com.virtualLibrary.model.BookInfo;
 
 
 public class BookInfoTest {
