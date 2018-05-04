@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,9 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.BooksRequestInitializer;
-import com.google.api.services.books.model.Volume;
 import com.virtualLibrary.Authentication.ClientCredentials;
 import com.virtualLibrary.Authentication.User;
 import com.virtualLibrary.model.Book;
-import com.virtualLibrary.model.BookDBManager;
 import com.virtualLibrary.retreive.BookHandler;
 import com.virtualLibrary.utils.Utils;
 
@@ -40,7 +39,6 @@ public class VirtualLibraryController {
 	@Autowired
 	private BookHandler bookHandler;
 	private ClientCredentials clientCredentials;
-	private JsonFactory jsonFactory;
 	private Books books;
 	private User user;
 	public VirtualLibraryController() {
@@ -92,9 +90,23 @@ public class VirtualLibraryController {
 		return "bookGrid";
 	}
     
+    @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
+   	public String getUserInfo(ModelMap model, @RequestParam String token){
+    	user = getUserInfo(token);
+    	model.addAttribute("user", user);
+   		return "userInfo";
+   	}
+    
     @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
    	public String getUserInfo(ModelMap model){
-   		return null;
+    	model.addAttribute("user", user);
+    	Map<String, List<Book>> map = new HashMap<>();
+    	map.put("Favourites", createBooksList(user.getFavorites()));
+		map.put("ReadBooks", createBooksList(user.getRead()));
+		map.put("TobeReadBooks", createBooksList(user.getToRead()));
+		model.addAttribute("UserInfo", map);
+		model.addAttribute("user", user);
+   		return "userInfo";
    	}
       
     @RequestMapping(value = "/bookInfo", method = RequestMethod.POST)
@@ -106,17 +118,17 @@ public class VirtualLibraryController {
       
     @RequestMapping(value = "/addFav", method = RequestMethod.POST)
    	public void addFav(ModelMap model, @RequestParam String ISBN){
-    	
+    	user.addToFavorites(ISBN);
    	}
       
     @RequestMapping(value = "/addToRead", method = RequestMethod.POST)
    	public void dummy4(ModelMap model, @RequestParam String ISBN){
-    	
+    	user.addToBeRead(ISBN);
    	}
       
     @RequestMapping(value = "/done", method = RequestMethod.POST)
    	public void dummy5(ModelMap model, @RequestParam String ISBN){
-    	
+    	user.addRead(ISBN);
    	}
     
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
@@ -153,6 +165,13 @@ public class VirtualLibraryController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
+		System.out.println("problem in getting user :)");
 		return null;
 	}
+    
+    private List<Book> createBooksList(List<String> isbns) {
+    	List<Book> ret = new ArrayList<Book>();
+    	isbns.forEach(isbn -> ret.add(bookHandler.getBook(books, isbn)));
+    	return ret;
+    }
 }

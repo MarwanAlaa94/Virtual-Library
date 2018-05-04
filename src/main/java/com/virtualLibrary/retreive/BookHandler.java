@@ -9,7 +9,6 @@ import com.google.api.services.books.Books;
 import com.google.api.services.books.Books.Volumes.List;
 import com.google.api.services.books.model.Volumes;
 import com.virtualLibrary.model.Book;
-import com.virtualLibrary.model.BookDBManager;
 
 @Service
 public class BookHandler {

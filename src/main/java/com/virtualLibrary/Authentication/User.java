@@ -1,6 +1,9 @@
 package com.virtualLibrary.Authentication;
 
+import java.util.List;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.virtualLibrary.model.UserDBM;
 
 public class User {
 	private String name;
@@ -12,10 +15,10 @@ public class User {
 	private String pictureUrl;
 	private String userId;
 	private boolean emailVerified;
-	
+	private UserDBM userDBM;
 	public User(Payload payload) {
 		userId = payload.getSubject();
-		System.out.println("User ID: " + userId);
+		//System.out.println("User ID: " + userId);
 		email = payload.getEmail();
 		emailVerified = Boolean.valueOf(payload.getEmailVerified());
 		name = (String) payload.get("name");
@@ -23,6 +26,7 @@ public class User {
 		locale = (String) payload.get("locale");
 		familyName = (String) payload.get("family_name");
 		givenName = (String) payload.get("given_name");
+		userDBM = new UserDBM(this);
 	}
 	
 	public String getName() {
@@ -93,11 +97,30 @@ public class User {
 		this.userId = userId;
 	}
 
-	public User() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public String getUserId() {
 		return userId;
+	}
+	
+	public void addToFavorites(String isbn) {
+		userDBM.addToFavorites(isbn);
+	}
+	
+	public void addRead(String isbn) {
+		userDBM.addRead(isbn);
+	}
+	
+	public void addToBeRead(String isbn) {
+		userDBM.addToBeRead(isbn);
+	}
+	
+	public List<String> getFavorites() {
+		return userDBM.getFavorites();
+	}
+	
+	public List<String> getRead() {
+		return userDBM.getRead();
+	}
+	public List<String> getToRead() {
+		return userDBM.getToRead();
 	}
 }

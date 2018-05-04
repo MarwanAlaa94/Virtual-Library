@@ -1,10 +1,8 @@
 package com.virtualLibrary.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.services.books.model.Volume;
-import com.virtualLibrary.utils.Utils;
 
 public class Book {
 	private String title;
