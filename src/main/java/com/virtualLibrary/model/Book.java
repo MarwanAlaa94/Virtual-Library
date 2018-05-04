@@ -12,54 +12,33 @@ public class Book {
 	private String description;
 	private String imageLink;
 	private String ISBN;
-	private BookInfo bookInfo;
-	private List<String> reviews = new ArrayList<String>();
-	private List<String> reviewers = new ArrayList<String>();
+	private double ratingAPI;
+	private double ratingDB;
+	private int rateAPINo;
+	private int rateDBNo;
+	private List<List<String>> reviews ;
+	private BookDBManager bookDBManager;
+	
+	public Book(Volume volume) {
+	    BookAPIBuilder.build(this, volume);
+        this.bookDBManager = new BookDBManager(this);
+        bookDBManager.build();
+	}
+	
 	public String getISBN() {
 		return ISBN;
 	}
 
-	public Book() {
-		
-	}
 	public void setISBN(String iSBN) {
 		ISBN = iSBN;
 	}
 
-	public void setReviews(List<String> reviews) {
+	public void setReviews(List<List<String>> reviews) {
 		this.reviews = reviews;
 	}
 	
-    
-	
 	public Book(String title) {
 		this.title = title;
-	}
-	
-	public Book(Volume volume) {
-		Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
-		this.title = volumeInfo.getTitle();
-		List<String> authors = volumeInfo.getAuthors();
-		this.googleMoreInfo = volumeInfo.getInfoLink();
-		this.description = volumeInfo.getDescription();
-		this.ISBN = volume.getId();
-		this.bookInfo = bookInfo;
-		//System.out.println(this.googleMoreInfo);
-		if (authors != null && !authors.isEmpty())
-			this.author = authors.get(0);
-		String imageLink = null;
-        try {
-        	imageLink = volumeInfo.getImageLinks().get("thumbnail").toString();
-        	this.imageLink = imageLink;
-        } catch (Exception e) {
-        }finally {
-        	if(imageLink == null){
-        		this.imageLink = Utils.standardImageLink;
-        	}
-        }
-        List<List<String>> temp = bookInfo.getReviews(ISBN);
-        reviewers = temp.get(0);
-        reviews = temp.get(1);
 	}
 	
 	public String getTitle() {
@@ -86,11 +65,8 @@ public class Book {
 	public void setImageLink(String imageLink) {
 		this.imageLink = imageLink;
 	}
-	public List<String> getReviews() {
+	public List<List<String>> getReviews() {
 		return reviews;
-	}
-	public void setReviews(ArrayList<String> result) {
-		this.reviews = result;
 	}
 	public String getGoogleMoreInfo() {
 		return googleMoreInfo;
@@ -98,8 +74,50 @@ public class Book {
 	public void setGoogleMoreInfo(String googleMoreInfo) {
 		this.googleMoreInfo = googleMoreInfo;
 	}
-	public String getRating() {
-		return String.format("%.2f", bookInfo.getRating(ISBN));
+
+	public double getRatingAPI() {
+		return ratingAPI;
 	}
+
+	public void setRatingAPI(double ratingAPI) {
+		this.ratingAPI = ratingAPI;
+	}
+
+	public double getRatingDB() {
+		return ratingDB;
+	}
+
+	public void setRatingDB(double ratingDB) {
+		this.ratingDB = ratingDB;
+	}
+
+	public int getRateAPINo() {
+		return rateAPINo;
+	}
+
+	public void setRateAPINo(int rateAPINo) {
+		this.rateAPINo = rateAPINo;
+	}
+
+	public int getRateDBNo() {
+		return rateDBNo;
+	}
+
+	public void setRateDBNo(int rateDBNo) {
+		this.rateDBNo = rateDBNo;
+	}
+	
+	public void addReview(String review, String reviewer) {
+		bookDBManager.addReview(review, reviewer);
+	}
+	public void updateRate(double rate) {
+		bookDBManager.updateRate(rate);
+	}
+	
+	public double getAverageRating () {
+		if(rateAPINo + rateDBNo == 0) return 0.0;
+		return ( rateAPINo * ratingAPI + rateDBNo * ratingDB ) / (rateAPINo + rateDBNo);
+	}
+
 	private String googleMoreInfo;
 }

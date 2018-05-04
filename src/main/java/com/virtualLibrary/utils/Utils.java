@@ -9,13 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import com.google.api.services.books.Books;
-import com.virtualLibrary.model.Book;
-import com.virtualLibrary.model.BookInfo;
-import com.virtualLibrary.retreive.BrowsingModel;
-
-
-
 public class Utils {
 	
 	public static String standardImageLink = "/resources/img/book1.png";

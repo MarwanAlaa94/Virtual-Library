@@ -9,10 +9,10 @@ import com.google.api.services.books.Books;
 import com.google.api.services.books.Books.Volumes.List;
 import com.google.api.services.books.model.Volumes;
 import com.virtualLibrary.model.Book;
-import com.virtualLibrary.model.BookInfo;
+import com.virtualLibrary.model.BookDBManager;
 
 @Service
-public class BrowsingModel {
+public class BookHandler {
 
 	public ArrayList<Book> browseBooks(Books books, String category ) {
 		return search(books, "category", category, 7);
@@ -44,5 +44,9 @@ public class BrowsingModel {
 		volumes.getItems().forEach(item -> result.add(new Book(item)));
 		System.out.println(searchVal);
 		return result;
-	}	
+	}
+	
+	public Book getBook(Books books, String ISBN) {
+		return search(books, "title", ISBN, 1).get(0);
+	}
 }

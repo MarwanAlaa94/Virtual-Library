@@ -15,12 +15,12 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.BooksRequestInitializer;
 import com.virtualLibrary.Authentication.ClientCredentials;
-import com.virtualLibrary.model.BookInfo;
+import com.virtualLibrary.model.BookDBManager;
 
 
 public class BookInfoTest {
 	private Books books;
-	private BookInfo bookInfo;
+	private BookDBManager bookInfo;
 	public BookInfoTest() throws GeneralSecurityException, IOException {
 		books = new Books.Builder(
 				GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), null)
@@ -29,7 +29,7 @@ public class BookInfoTest {
 						ClientCredentials.API_KEY
 					)
 				).build();
-		bookInfo = new BookInfo(books);
+	//	bookInfo = new BookDBBuilder(books);
 	}
 	
 	@Before

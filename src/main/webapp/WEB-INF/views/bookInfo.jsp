@@ -37,7 +37,7 @@
       <img style="width: 200px;margin-left: 23%;" src="${book.imageLink}">
       <h1>${book.title}</h1>
       <h4>by ${book.author}</h4>
-      <h4>Book rating : ${book.rating}</h4>
+      <h4>Book rating : ${book.averageRating}</h4>
        <div>
       <iframe name="hiddenFrame0" class="hide"></iframe>
       <form action="/rate" method="post" target="hiddenFrame0">
@@ -63,8 +63,9 @@
 
 <div>
 <c:forEach var="review" items="${book.reviews}">
+<h3>${review.get(1)} :</h3>
 <div class="review">
-<p>${review}</p>
+<p>${review.get(0)}</p>
 </div>
 </c:forEach>
 </div>

@@ -1,4 +1,4 @@
-package com.virtualLibrary.retreive;
+package com.virtualLibrary.control;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -25,11 +25,12 @@ import com.google.api.services.books.model.Volume;
 import com.virtualLibrary.Authentication.ClientCredentials;
 import com.virtualLibrary.Authentication.User;
 import com.virtualLibrary.model.Book;
-import com.virtualLibrary.model.BookInfo;
+import com.virtualLibrary.model.BookDBManager;
+import com.virtualLibrary.retreive.BookHandler;
 import com.virtualLibrary.utils.Utils;
 
 @Controller
-public class BookBrowser {
+public class VirtualLibraryController {
 	private static final String APPLICATION_NAME = "VirtualLibrary";
 	private static final NumberFormat CURRENCY_FORMATTER = NumberFormat
 			.getCurrencyInstance();
@@ -37,14 +38,12 @@ public class BookBrowser {
 			.getPercentInstance();
 	
 	@Autowired
-	private BrowsingModel browsingModel;
-	
+	private BookHandler bookHandler;
 	private ClientCredentials clientCredentials;
 	private JsonFactory jsonFactory;
 	private Books books;
 	private User user;
-	private BookInfo bookInfo;
-	public BookBrowser() {
+	public VirtualLibraryController() {
 		ClientCredentials clientCredentials = new ClientCredentials();
 		JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 		clientCredentials.errorIfNotSpecified();
@@ -52,7 +51,7 @@ public class BookBrowser {
 		try {
 			books = new Books.Builder(
 					GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
-					.setApplicationName(com.virtualLibrary.retreive.BookBrowser.APPLICATION_NAME)
+					.setApplicationName(com.virtualLibrary.control.VirtualLibraryController.APPLICATION_NAME)
 					.setGoogleClientRequestInitializer(
 						new BooksRequestInitializer(
 							ClientCredentials.API_KEY
@@ -61,7 +60,6 @@ public class BookBrowser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		bookInfo = new BookInfo(books); 
 	}
 	
 	
@@ -70,7 +68,7 @@ public class BookBrowser {
 		List<String> categories = Utils.getSupportedCategories();
 		HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();
 		for(String category : categories){
-			map.put(category.replaceAll("\"", ""), browsingModel.browseBooks(books, category.replaceAll("\"", "")));
+			map.put(category.replaceAll("\"", ""), bookHandler.browseBooks(books, category.replaceAll("\"", "")));
 		}
 		model.addAttribute("categoryList", map);
 		return "home";
@@ -79,7 +77,7 @@ public class BookBrowser {
 	@RequestMapping(value = "/bookGrid", method = RequestMethod.POST)
 	public String  getBookGrid(ModelMap model,  @RequestParam String category) {
 		HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();	
-		map.put(category, browsingModel.search(books, "category", category, 40));
+		map.put(category, bookHandler.search(books, "category", category, 40));
 		model.addAttribute("categoryList", map);
 		return "bookGrid";
 	}
@@ -88,21 +86,22 @@ public class BookBrowser {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
 	public String search(ModelMap model, @RequestParam String key, @RequestParam String value){
     	HashMap<String, ArrayList<Book>> map = new HashMap<String, ArrayList<Book>> ();
-    	map.put(value, browsingModel.search(books, key, value, 40));
+    	map.put(value, bookHandler.search(books, key, value, 40));
     	model.addAttribute("categoryList", map);
 		model.keySet().forEach(temp->System.out.println("model =      " + temp));
 		return "bookGrid";
 	}
     
     @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
-   	public String dummy(ModelMap model){
-   
-   		return "userInfo";
+   	public String getUserInfo(ModelMap model){
+   		return null;
    	}
       
     @RequestMapping(value = "/bookInfo", method = RequestMethod.POST)
    	public String getBookInfo(ModelMap model,@RequestParam String ISBN){
-    	return null;
+    	Book book = bookHandler.getBook(books, ISBN);
+    	model.addAttribute("book", book);
+    	return "bookInfo";
    	}
       
     @RequestMapping(value = "/addFav", method = RequestMethod.POST)
@@ -121,22 +120,23 @@ public class BookBrowser {
    	}
     
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
-   	public void rateBook(ModelMap model, @RequestParam String rate, @RequestParam String ISBN){
-      	bookInfo.rateBook(ISBN, Integer.parseInt(rate));
-      	
+   	public String rateBook(ModelMap model, @RequestParam String rate, @RequestParam String ISBN){
+        Book book = bookHandler.getBook(books, ISBN);
+        book.updateRate(Double.parseDouble(rate));
+    	model.addAttribute("book", book);
+    	return "bookInfo";
+        
    	}
     
-    @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
-	public String getUserBooks(ModelMap model, @RequestParam String token) {
-		return null;
-    	
-	}
-
-      
     @RequestMapping(value = "/addReview", method = RequestMethod.POST)
-      public void addReview(ModelMap model,@RequestParam String review, @RequestParam String ISBN){
-             
-      }
+    public String addReview(ModelMap model,@RequestParam String review, @RequestParam String ISBN){
+       Book book = bookHandler.getBook(books, ISBN);
+       book.addReview(review, "John Doe");
+   	   model.addAttribute("book", book);
+   	   return "bookInfo";
+    }
+    
+
     public User getUserInfo(String token) {
 		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier
 			  .Builder(new ApacheHttpTransport(), JacksonFactory.getDefaultInstance())
